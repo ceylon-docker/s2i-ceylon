@@ -1,0 +1,15 @@
+#!/bin/bash -e
+#
+# S2I run script for the 's2i-ceylon' image.
+# The run script executes the server that runs your application.
+#
+# For more information see the documentation:
+#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
+#
+
+# Very simplistic way to find a module to run
+# Works only when there is just a single module
+MODULES=$(find modules -name '*.car' -printf "%P\n" | sed -r 's/^(.*)\/([^\/]*)\/[^\/]*/\1$\2/' | tr "/$" "./")
+MODULE=${MODULES[0]}
+exec ceylon run ${MODULE}
+
