@@ -83,7 +83,6 @@ function build_jres() {
         FROM=${FROM_TEMPLATE/@/$t}
         JRE=${JRE_TEMPLATE/@/$t}
         TAGS=()
-        TAGS+=("$VERSION-$JRE")
         if [[ "$t" == "$DEFAULT_JRE" ]]; then
             TAGS+=("$VERSION")
             if [[ "$VERSION" == "$LATEST" ]]; then
