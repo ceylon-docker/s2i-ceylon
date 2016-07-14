@@ -1,0 +1,39 @@
+#!/bin/bash -e
+#
+# S2I run script for the 's2i-ceylon' image.
+# The run script executes the server that runs your application.
+#
+# For more information see the documentation:
+#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
+#
+
+# First check everything is okay and there is actually something to run
+MODULES=$(find modules -name '*.car' -printf "%P\n" | sed -r 's/^(.*)\/([^\/]*)\/[^\/]*/\1$\2/' | tr "/$" "./")
+if [[ ${#MODULES[@]} -eq 0 ]]; then
+    echo "Error: no compiled modules found in ./modules"
+    exit 1
+fi
+MODULE=${MODULES[0]}
+
+if [[ -f ".ceylon/run.sh" ]]; then
+    . ".ceylon/run.sh"
+else
+    # See if the config file defines the module to run for the JVM.
+    javamodule=$(ceylon config get runtool.java.module)
+
+    # See if the config file defines the module to run for JavaScript.
+    jsmodule=$(ceylon config get runtool.js.module)
+
+    # We first checked "runtool.java.module" and if that didn't exist
+    # we try "runtool.module" and finally we default to "$MODULE"
+    if [[ -z "$javamodule" && -z "$jsmodule" ]]; then
+        javamodule=$(ceylon config get runtool.module)
+        if [[ -z "$javamodule" ]]; then
+            javamodule=$MODULE
+        fi
+    fi
+
+    [[ ! -z "$javamodule" ]] && exec ceylon run $javamodule
+    [[ ! -z "$jsmodule" ]] && exec ceylon run-js $jsmodule
+fi
+
