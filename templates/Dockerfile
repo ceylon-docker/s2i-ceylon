@@ -1,12 +1,12 @@
 
-FROM ceylon/ceylon:1.2.2-jre8-redhat
+FROM @@FROM@@
 
-# This image provides a Ceylon 1.2.2 environment you can use to run your Ceylon
+# This image provides a Ceylon @@VERSION@@ environment you can use to run your Ceylon
 # applications.
 
 MAINTAINER Tako Schotanus <tako@ceylon-lang.org>
 
-ENV CEYLON_VERSION 1.2.2
+ENV CEYLON_VERSION @@VERSION@@
 
 LABEL summary="Platform for building and running Ceylon applications" \
 	  io.k8s.description="Platform for building and running Ceylon applications" \
