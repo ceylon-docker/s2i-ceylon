@@ -63,7 +63,7 @@ function build_branch() {
     rm -rf /tmp/docker-ceylon-build-templates
     [[ $VERIFY -eq 1 ]] && make test
     git add .
-    git commit -q -m "Updated Dockerfile for $VERSION"
+    git commit -q -m "Updated Dockerfile for $VERSION" || true
     for t in ${TAGS[@]}; do
         git tag -f $t
     done
