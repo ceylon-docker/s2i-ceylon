@@ -30,7 +30,7 @@ fi
 
 echo "---> Installing application source..."
 cp -Rf /tmp/src/. ./
-mkdir modules
+mkdir -p modules
 
 echo "---> Building application from source..."
 if [[ -f ".ceylon/build.sh" ]]; then
