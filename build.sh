@@ -57,7 +57,7 @@ function build_branch() {
     cp -a templates /tmp/docker-ceylon-build-templates
     sed -i "s/@@FROM@@/$FROM/g" /tmp/docker-ceylon-build-templates/Dockerfile
     sed -i "s/@@VERSION@@/$VERSION/g" /tmp/docker-ceylon-build-templates/Dockerfile
-    git checkout -q -B $BRANCH
+    git checkout --quiet $(git show-ref --verify --quiet refs/heads/$BRANCH || echo '-b') $BRANCH
     rm -rf build.sh templates LICENSE README.md
     cp -a /tmp/docker-ceylon-build-templates/. .
     rm -rf /tmp/docker-ceylon-build-templates
