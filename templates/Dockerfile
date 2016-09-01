@@ -25,7 +25,10 @@ COPY .s2i/bin/ $STI_SCRIPTS_PATH
 
 USER root
 
-RUN chown -R 1001:0 /app && chmod -R ug+rwx /app
+RUN useradd -u 1001 -r -g 0 -d ${HOME} -s /sbin/nologin -c "Default Application User" default && \
+    mkdir -p ${HOME} && \
+    chown -R 1001:0 ${HOME} && \
+    chmod -R ug+rwx ${HOME}
 
 USER 1001
 
