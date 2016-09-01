@@ -67,7 +67,7 @@ function build_branch() {
     for t in ${TAGS[@]}; do
         git tag -f $t
     done
-    [[ $PUSH -eq 1 ]] && git push -u origin $BRANCH && git push --force --tags
+    [[ $PUSH -eq 1 ]] && git push -u origin $BRANCH
     git checkout -q master
 }
 
@@ -106,4 +106,5 @@ function build() {
 for v in ${VERSIONS[@]}; do
     build $v
 done
+[[ $PUSH -eq 1 ]] && git push --force --tags
 
