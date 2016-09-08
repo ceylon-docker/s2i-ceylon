@@ -67,7 +67,7 @@ function build_branch() {
     [[ $PUSH -eq 1 ]] && git push -u origin $BRANCH
     for t in ${TAGS[@]}; do
         git tag -f $t
-        [[ $PUSH -eq 1 ]] && git push origin $t
+        [[ $PUSH -eq 1 ]] && git push --force origin $t
     done
     git checkout -q master
 }
