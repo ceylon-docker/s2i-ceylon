@@ -30,7 +30,6 @@ fi
 
 echo "---> Installing application source..."
 cp -Rf /tmp/src/. ./
-chmod -R ug+rwX .
 mkdir -p modules
 
 echo "---> Building application from source..."
@@ -81,6 +80,9 @@ else
     rm -rf tmpmodules
     rm -rf ${HOME}/.ceylon/cache/*
 fi
+
+# Make sure everything is writable because of a problem with ceylon.io
+chmod -R ug+rwX ${HOME}
 
 # Check that compilation actually worked
 MODULES=$(find modules -name '*.car' -printf "%P\n" | sed -r 's/^(.*)\/([^\/]*)\/[^\/]*/\1$\2/' | tr "/$" "./")
