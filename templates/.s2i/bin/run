@@ -33,7 +33,12 @@ else
         fi
     fi
 
-    [[ ! -z "$javamodule" ]] && exec ceylon run $javamodule
-    [[ ! -z "$jsmodule" ]] && exec ceylon run-js $jsmodule
+    # Now depending on the modules we found we either execute them
+    # with the JVM or the JS backend (or both). The --sysrep argument
+    # can be used because the `assemble` script already copied all
+    # dependencies including the system modules. It's needed because
+    # ceylon.io doesn't allow opening of read-only files
+    [[ ! -z "$javamodule" ]] && exec ceylon run --sysrep modules $javamodule
+    [[ ! -z "$jsmodule" ]] && exec ceylon run-js --sysrep modules $jsmodule
 fi
 
