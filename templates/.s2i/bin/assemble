@@ -74,7 +74,9 @@ else
     # Bit of a crappy way to find all the modules in the temporary local repo
     compiledmodules=$(ceylon info --no-default-repositories --cacherep=dummy --show-versions --rep=tmpmodules \* | grep -Pv '(^java\.|^javax\.|^oracle\.|^sun\.)')
     # Now copy the compiled modules with all their dependencies to the default local repo
-    ceylon copy --with-dependencies --rep=tmpmodules --out=modules "$compiledmodules" ceylon.runtime/${CEYLON_VERSION}
+    ceylon copy --with-dependencies --rep=tmpmodules --out=modules "$compiledmodules"
+    # And copy the entire system repo there as well
+    cp -a /usr/lib/ceylon/ceylon/repo/* modules
     # Clean up the temporary and cache repos
     rm -rf tmpmodules
     rm -rf ${HOME}/.ceylon/cache/*
