@@ -30,6 +30,7 @@ fi
 
 echo "---> Installing application source..."
 cp -Rf /tmp/src/. ./
+chmod -R ug+rwX .
 mkdir -p modules
 
 echo "---> Building application from source..."
