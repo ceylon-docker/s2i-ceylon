@@ -39,9 +39,9 @@ if [[ -f ".ceylon/build.sh" ]]; then
 else
     if [[ $oldceylon -eq 1 ]]; then
         # See if the config file defines the modules to compile for the JVM.
-        # We first check "compiler.java.module" and if that doesn't exist
+        # We first check "compiler.jvm.module" and if that doesn't exist
         # we try "compiler.module" and finally we default to "\*"
-        javamodules=$(ceylon config get compiler.java.module)
+        javamodules=$(ceylon config get compiler.jvm.module)
         if [[ -z "$javamodules" ]]; then
             javamodules=$(ceylon config get compiler.module)
             if [[ -z "$javamodules" ]]; then
