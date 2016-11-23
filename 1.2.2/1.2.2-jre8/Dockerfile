@@ -17,20 +17,11 @@ LABEL summary="Platform for building and running Ceylon applications" \
       io.openshift.tags="builder,ceylon,ceylon12020" \
       io.openshift.s2i.scripts-url=image:///usr/libexec/s2i
 
-ENV STI_SCRIPTS_PATH=/usr/libexec/s2i \
-    HOME=/app \
-    LANG="en_US.UTF-8"
+ENV STI_SCRIPTS_PATH=/usr/libexec/s2i
 
 COPY .s2i/bin/ $STI_SCRIPTS_PATH
 
-USER root
-
-RUN useradd -u 1001 -r -g 0 -d ${HOME} -s /sbin/nologin -c "Default Application User" default && \
-    mkdir -p ${HOME} && \
-    chown -R 1001:0 ${HOME} && \
-    chmod -R ug+rwx ${HOME}
-
-USER 1001
+USER 1000
 
 # Set the default CMD to print the usage of the language image
 CMD $STI_SCRIPTS_PATH/usage
