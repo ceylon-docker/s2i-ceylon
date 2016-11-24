@@ -12,9 +12,9 @@ ENV CEYLON_VERSION 1.2.0
 
 LABEL summary="Platform for building and running Ceylon applications" \
 	  io.k8s.description="Platform for building and running Ceylon applications" \
-      io.k8s.display-name="Ceylon 1.2.2" \
+      io.k8s.display-name="Ceylon 1.2.0" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,ceylon,ceylon12020" \
+      io.openshift.tags="builder,ceylon,ceylon10200" \
       io.openshift.s2i.scripts-url=image:///usr/libexec/s2i
 
 ENV STI_SCRIPTS_PATH=/usr/libexec/s2i
