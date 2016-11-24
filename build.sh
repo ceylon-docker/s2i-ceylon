@@ -5,6 +5,15 @@ set -e
 # Define all the versions that should be generated
 VERSIONS=(1.0.0 1.1.0 1.2.0 1.2.1 1.2.2 1.3.0 1.3.1)
 
+declare -A VERSIONNUMS
+VERSIONNUMS[1.0.0]=10000
+VERSIONNUMS[1.1.0]=10100
+VERSIONNUMS[1.2.0]=10200
+VERSIONNUMS[1.2.1]=10201
+VERSIONNUMS[1.2.2]=10202
+VERSIONNUMS[1.3.0]=10300
+VERSIONNUMS[1.3.1]=10301
+
 # Define the "latest" version
 LATEST=1.3.1
 
@@ -83,6 +92,8 @@ function build_dir() {
     cp -a templates/.s2i templates/Makefile templates/test /tmp/docker-ceylon-build-templates/
     sed -i "s/@@FROM@@/${FROM//\//\\/}/g" /tmp/docker-ceylon-build-templates/Dockerfile
     sed -i "s/@@VERSION@@/$VERSION/g" /tmp/docker-ceylon-build-templates/Dockerfile
+    sed -i "s/@@VERSIONNUM@@/${VERSIONNUMS[$VERSION]}/g" /tmp/docker-ceylon-build-templates/Dockerfile
+    sed -i "s/@@VERSION@@/$VERSION/g" /tmp/docker-ceylon-build-templates/test/test-app/source/sample/module.ceylon
     mkdir -p "$VERSION/$NAME"
     pushd "$VERSION/$NAME" > /dev/null
     cp -a /tmp/docker-ceylon-build-templates/. .
