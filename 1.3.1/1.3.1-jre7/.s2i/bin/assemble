@@ -67,7 +67,7 @@ else
         [[ ! -z "$jsmodules" ]] && ceylon compile-js -W --out=tmpmodules "$jsmodules"
     else
         # Compile all available source modules to a temporary local repo
-        ceylon compile -W -progress --out=tmpmodules
+        ceylon compile -W --progress --out=tmpmodules
         ceylon compile-js -W --out=tmpmodules
     fi
     # Bit of a crappy way to find all the modules in the temporary local repo
