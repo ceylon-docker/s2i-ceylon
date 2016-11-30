@@ -82,7 +82,7 @@ else
 fi
 
 # Make sure everything is writable because of a problem with ceylon.io
-chmod -Rf ug+rwX ${HOME}
+chmod -Rf ug+rwX ${HOME} || true
 
 # Check that compilation actually worked
 MODULES=$(find modules -name '*.car' -printf "%P\n" | sed -r 's/^(.*)\/([^\/]*)\/[^\/]*/\1$\2/' | tr "/$" "./")
