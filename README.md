@@ -12,3 +12,16 @@ The following images/tags are available:
 
 *For all these images there is also a `x.y.z-jre7` version available*
 
+### OpenShift Manual Setup
+
+If you want to manually add these Ceylon builder images to an OpenShift v3 setup then follow these steps in the web interface:
+
+ - Log in to the OpenShift console
+ - Select or create a project
+ - Click the "Add to Project" button
+ - Select the "Import YAML / JSON" tab
+ - Copy & paste the contents of the [image-stream.json](https://github.com/ceylon-docker/s2i-ceylon/blob/master/image-stream.json) file into the text box
+ - Click the "Create" button
+
+Now whenever you go back to the "Add to Project" screen there should be entries for the Ceylon builders.
+
