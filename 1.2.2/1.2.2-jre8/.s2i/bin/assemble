@@ -63,8 +63,8 @@ else
         fi
 
         # Compile the modules to a temporary local repo
-        ceylon compile -W --progress --out=tmpmodules "$javamodules"
-        [[ ! -z "$jsmodules" ]] && ceylon compile-js -W --out=tmpmodules "$jsmodules"
+        ceylon compile -W --progress --out=tmpmodules $javamodules
+        [[ ! -z "$jsmodules" ]] && ceylon compile-js -W --out=tmpmodules $jsmodules
     else
         # Compile all available source modules to a temporary local repo
         ceylon compile -W --progress --out=tmpmodules
@@ -73,7 +73,7 @@ else
     # Bit of a crappy way to find all the modules in the temporary local repo
     compiledmodules=$(ceylon info --no-default-repositories --cacherep=dummy --show-versions --rep=tmpmodules \* | grep -Pv '(^java\.|^javax\.|^oracle\.|^sun\.)')
     # Now copy the compiled modules with all their dependencies to the default local repo
-    ceylon copy --with-dependencies --rep=tmpmodules --out=modules "$compiledmodules"
+    ceylon copy --with-dependencies --rep=tmpmodules --out=modules $compiledmodules
     # And copy the entire system repo there as well
     cp -a /usr/lib/ceylon/ceylon/repo/* modules
     # Clean up the temporary and cache repos
