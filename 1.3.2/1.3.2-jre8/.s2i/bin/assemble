@@ -1,0 +1,93 @@
+#!/bin/bash -e
+#
+# S2I assemble script for the 's2i-ceylon' image.
+# The 'assemble' script builds your application source so that it is ready to run.
+#
+# For more information refer to the documentation:
+#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
+#
+
+if [[ "$1" == "-h" ]]; then
+	# If the 's2i-ceylon' assemble script is executed with '-h' flag,
+	# print the usage.
+	exec /usr/libexec/s2i/usage
+fi
+
+versions="$CEYLON_VERSION
+1.2.3"
+[[ "$versions" == "$(sort --ignore-leading-blanks --version-sort <<< "$versions")" ]] && oldceylon=1 || oldceylon=0
+
+pwd
+echo $HOME
+mkdir -p ~/.ceylon/cache
+
+# Restore artifacts from the previous build (if they exist).
+#
+if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
+  echo "---> Restoring build artifacts..."
+  mv /tmp/artifacts/. ~/.ceylon/cache
+fi
+
+echo "---> Installing application source..."
+cp -Rf /tmp/src/. ./
+mkdir -p modules
+
+echo "---> Building application from source..."
+if [[ -f ".ceylon/build.sh" ]]; then
+    # Use a custom build script to compile
+    . ".ceylon/build.sh"
+else
+    if [[ $oldceylon -eq 1 ]]; then
+        # See if the config file defines the modules to compile for the JVM.
+        # We first check "compiler.jvm.module" and if that doesn't exist
+        # we try "compiler.module" and finally we default to "\*"
+        javamodules=$(ceylon config get compiler.jvm.module)
+        if [[ -z "$javamodules" ]]; then
+            javamodules=$(ceylon config get compiler.module)
+            if [[ -z "$javamodules" ]]; then
+                javamodules="*"
+            fi
+        fi
+
+        # See if the config file defines the modules to compile for JavaScript.
+        # We first check "compiler.js.module" and if that doesn't exist _and_
+        # we're using a new Ceylon version (>=1.2.3) we try "compiler.module"
+        # and finally we default to "\*". For older Ceylon versions we default
+        # to not compiling with the JavaScript compiler.
+        jsmodules=$(ceylon config get compiler.js.module)
+        if [[ -z "$jsmodules" && $oldceylon -eq 0 ]]; then
+            jsmodules=$(ceylon config get compiler.module)
+            if [[ -z "$jsmodules" ]]; then
+                jsmodules="*"
+            fi
+        fi
+
+        # Compile the modules to a temporary local repo
+        ceylon compile -W --progress --out=tmpmodules $javamodules
+        [[ ! -z "$jsmodules" ]] && ceylon compile-js -W --out=tmpmodules $jsmodules
+    else
+        # Compile all available source modules to a temporary local repo
+        ceylon compile -W --progress --out=tmpmodules
+        ceylon compile-js -W --out=tmpmodules
+    fi
+    # Bit of a crappy way to find all the modules in the temporary local repo
+    compiledmodules=$(ceylon info --no-default-repositories --cacherep=dummy --show-versions --rep=tmpmodules \* | grep -Pv '(^java\.|^javax\.|^oracle\.|^sun\.)')
+    # Now copy the compiled modules with all their dependencies to the default local repo
+    ceylon copy --with-dependencies --rep=tmpmodules --out=modules $compiledmodules
+    # And copy the entire system repo there as well
+    cp -a /usr/lib/ceylon/ceylon/repo/* modules
+    # Clean up the temporary and cache repos
+    rm -rf tmpmodules
+    rm -rf ${HOME}/.ceylon/cache/*
+fi
+
+# Make sure everything is writable because of a problem with ceylon.io
+chmod -Rf ug+rwX ${HOME} || true
+
+# Check that compilation actually worked
+MODULES=$(find modules -name '*.car' -printf "%P\n" | sed -r 's/^(.*)\/([^\/]*)\/[^\/]*/\1$\2/' | tr "/$" "./")
+if [[ ${#MODULES[@]} -eq 0 ]]; then
+    echo "Error: no compiled modules found in ./modules"
+    exit 1
+fi
+
