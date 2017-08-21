@@ -2,7 +2,8 @@ This repository contains Ceylon S2I builder images to be used with [source-to-im
 
 The following images/tags are available:
 
- - `1.3.2-jre8`, `1.3.2`, `latest-jre8`, `latest` ([ceylon/Dockerfile](https://github.com/ceylon-docker/s2i-ceylon/blob/master/1.3.2/1.3.2-jre8/Dockerfile))
+ - `1.3.3-jre8`, `1.3.3`, `latest-jre8`, `latest` ([ceylon/Dockerfile](https://github.com/ceylon-docker/s2i-ceylon/blob/master/1.3.3/1.3.3-jre8/Dockerfile))
+ - `1.3.2-jre8`, `1.3.2` ([ceylon/Dockerfile](https://github.com/ceylon-docker/s2i-ceylon/blob/master/1.3.2/1.3.2-jre8/Dockerfile))
  - `1.3.1-jre8`, `1.3.1` ([ceylon/Dockerfile](https://github.com/ceylon-docker/s2i-ceylon/blob/master/1.3.1/1.3.1-jre8/Dockerfile))
  - `1.3.0-jre8`, `1.3.0` ([ceylon/Dockerfile](https://github.com/ceylon-docker/s2i-ceylon/blob/master/1.3.0/1.3.0-jre8/Dockerfile))
  - `1.2.2-jre8`, `1.2.2` ([ceylon/Dockerfile](https://github.com/ceylon-docker/s2i-ceylon/blob/master/1.2.2/1.2.2-jre8/Dockerfile))
@@ -25,5 +26,3 @@ If you want to manually add these Ceylon builder images to an OpenShift v3 setup
  - Click the "Create" button
 
 Now whenever you go back to the "Add to Project" screen there should be entries for the Ceylon builders.
-
-
